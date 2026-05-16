@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Expense Tracker</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <div class="container">
+
+        <h1>💰 Smart Expense Tracker</h1>
+
+        <!-- ADD EXPENSE -->
+        <div class="card">
+            <h2>Add Expense</h2>
+            <div class="form-row">
+                <input type="number" id="amount" placeholder="Amount (₹)" />
+                <select id="category">
+                    <option>Food</option>
+                    <option>Travel</option>
+                    <option>Shopping</option>
+                    <option>Bills</option>
+                    <option>Entertainment</option>
+                </select>
+                <input type="date" id="date" />
+                <input type="text" id="description" placeholder="Description" />
+                <button onclick="addExpense()">Add</button>
+            </div>
+        </div>
+
+        <!-- CHART -->
+        <div class="card chart-card">
+            <h2>Spending by Category</h2>
+            <canvas id="pieChart" width="280" height="280"></canvas>
+        </div>
+
+        <!-- AI INSIGHTS -->
+        <div class="card">
+            <h2>AI Insights ✨</h2>
+            <button class="ai-btn" onclick="getInsights()">Generate AI Insights</button>
+            <div id="insights-box" class="insights-box hidden"></div>
+        </div>
+
+        <!-- TABLE -->
+        <div class="card">
+            <h2>All Expenses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Category</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="expense-body"></tbody>
+            </table>
+            <p id="total"></p>
+        </div>
+
+    </div>
+
+    <script>
+        const BASE = 'http://localhost:8080/api';
+        let pieChart = null;
+
+        window.onload = loadExpenses;
+
+        async function addExpense() {
+            const amount = document.getElementById('amount').value;
+            const category = document.getElementById('category').value;
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value;
+
+            if (!amount || !date) {
+                alert('Please enter amount and date');
+                return;
+            }
+
+            await fetch(`${BASE}/expenses`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ amount, category, date, description })
+            });
+
+            document.getElementById('amount').value = '';
+            document.getElementById('description').value = '';
+            loadExpenses();
+        }
+
+        async function loadExpenses() {
+            const res = await fetch(`${BASE}/expenses`);
+            const expenses = await res.json();
+
+            const tbody = document.getElementById('expense-body');
+            tbody.innerHTML = '';
+            let total = 0;
+
+            expenses.forEach(e => {
+                total += e.amount;
+                tbody.innerHTML += `
+        <tr>
+          <td>₹${e.amount}</td>
+          <td><span class="badge ${e.category.toLowerCase()}">${e.category}</span></td>
+          <td>${e.date}</td>
+          <td>${e.description || '-'}</td>
+          <td><button class="del-btn" onclick="deleteExpense(${e.id})">Delete</button></td>
+        </tr>`;
+            });
+
+            document.getElementById('total').textContent =
+                expenses.length === 0 ? '' : `Total Spent: ₹${total.toFixed(2)}`;
+
+            updateChart(expenses);
+        }
+
+        async function deleteExpense(id) {
+            await fetch(`${BASE}/expenses/${id}`, { method: 'DELETE' });
+            loadExpenses();
+        }
+
+        async function getInsights() {
+            const box = document.getElementById('insights-box');
+            box.classList.remove('hidden');
+            box.textContent = '⏳ Analyzing your expenses with AI...';
+
+            const res = await fetch(`${BASE}/insights`);
+            const text = await res.text();
+            box.innerHTML = text.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+        }
+
+        function updateChart(expenses) {
+            const categories = ['Food', 'Travel', 'Shopping', 'Bills', 'Entertainment'];
+            const data = categories.map(cat =>
+                expenses
+                    .filter(e => e.category === cat)
+                    .reduce((sum, e) => sum + e.amount, 0)
+            );
+
+            if (pieChart) pieChart.destroy();
+
+            pieChart = new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: {
+                    labels: categories,
+                    datasets: [{
+                        data,
+                        backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF']
+                    }]
+                },
+                options: { responsive: false }
+            });
+        }
+    </script>
+
+</body>
+
+</html>
