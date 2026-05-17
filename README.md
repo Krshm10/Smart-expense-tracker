@@ -1,37 +1,92 @@
-# Smart Expense Tracker with AI Insights
+# 💰 Smart Expense Tracker with AI Insights
 
-A full-stack web application built with Java Spring Boot that helps users 
-track daily expenses and generates AI-powered financial insights.
+A full-stack expense management web application built with **Java Spring Boot** that helps users track daily expenses, visualize spending patterns, and receive **AI-powered financial insights** using Groq's Llama 3.3 model.
 
-## Tech Stack
-- **Backend:** Java, Spring Boot, Spring Data JPA
-- **Database:** H2 (in-memory)
-- **Frontend:** HTML, CSS, JavaScript
-- **AI:** Groq API (Llama 3.3)
-- **Charts:** Chart.js
+---
 
-## Features
-- Add, view, delete expenses by category
-- Interactive pie chart by spending category
-- AI-generated spending insights and savings tips
-- REST API backend
+## 🚀 Live Features
 
-## API Endpoints
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | /api/expenses | Add new expense |
-| GET | /api/expenses | Get all expenses |
-| DELETE | /api/expenses/{id} | Delete expense |
-| GET | /api/insights | Get AI insights |
+- **Add & manage expenses** with flexible categories (preset + custom)
+- **Monthly / Yearly toggle** — filter expenses by month or full year
+- **Analytics dashboard** — total spent, transactions, avg per transaction, top category, highest spending day, vs last month comparison
+- **Interactive charts** — pie chart for category breakdown, bar chart for monthly trend
+- **AI Insights** — one-click AI analysis of spending patterns, overspent categories, and personalized savings tips
+- **MySQL database** — data persists across sessions
 
-## Setup Instructions
-1. Clone the repo
-2. Copy `application.properties.example` to `application.properties`
-3. Add your Groq API key
-4. Run `.\mvnw.cmd spring-boot:run`
-5. Open `http://localhost:8080/index.html`
+---
 
-## Screenshots
-![Dashboard](screenshots/dashboard1.png)
-![Dashboard](screenshots/dashboard2.png)
-![AI Insights](screenshots/insights.png)
+## 🛠 Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Java 17, Spring Boot 3.2, Spring Data JPA |
+| Database | MySQL |
+| Frontend | HTML, CSS, Vanilla JavaScript |
+| Charts | Chart.js |
+| AI | Groq API (Llama 3.3-70B) |
+| Architecture | MVC — Controller → Service → Repository |
+
+---
+
+## 📸 Screenshots
+
+### Dashboard — Yearly View with Analytics & Charts
+![Dashboard](screenshots/SS%(2).png)
+
+### Expense Table — Monthly View
+![Expense Table](screenshots/SS%20(1).png)
+
+### AI Insights — Spending Analysis
+![AI Insights](screenshots/SS%20(2).png)
+
+
+---
+
+## ⚙️ Setup Instructions
+
+### Prerequisites
+- Java 17+
+- MySQL
+- Groq API key (free at [console.groq.com](https://console.groq.com))
+
+### Steps
+
+**1. Clone the repository**
+```bash
+git clone https://github.com/Krshm10/Smart-expense-tracker.git
+cd Smart-expense-tracker
+```
+
+**2. Create MySQL database**
+```sql
+CREATE DATABASE expensedb;
+```
+
+**3. Configure `application.properties`**
+
+Copy the example file and fill in your values:
+```bash
+cp src/main/resources/application.properties.example src/main/resources/application.properties
+```
+
+```properties
+spring.datasource.url=jdbc:mysql://localhost:3306/expensedb
+spring.datasource.username=root
+spring.datasource.password=YOUR_MYSQL_PASSWORD
+
+groq.api.key=YOUR_GROQ_API_KEY
+
+server.port=8080
+spring.web.resources.static-locations=classpath:/static/
+```
+
+**4. Run the application**
+```bash
+.\mvnw.cmd spring-boot:run
+```
+
+**5. Open in browser**
+```
+http://localhost:8080/index.html
+```
+
