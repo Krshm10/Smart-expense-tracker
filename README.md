@@ -32,5 +32,6 @@ track daily expenses and generates AI-powered financial insights.
 5. Open `http://localhost:8080/index.html`
 
 ## Screenshots
-![Dashboard](screenshots/dashboard.png)
+![Dashboard](screenshots/dashboard1.png)
+![Dashboard](screenshots/dashboard2.png)
 ![AI Insights](screenshots/insights.png)
