@@ -4,7 +4,7 @@ A full-stack expense management web application built with **Java Spring Boot** 
 
 ---
 
-## 🚀 Live Features
+## 🚀 Features
 
 - **Add & manage expenses** with flexible categories (preset + custom)
 - **Monthly / Yearly toggle** — filter expenses by month or full year
@@ -91,4 +91,4 @@ spring.web.resources.static-locations=classpath:/static/
 ```
 http://localhost:8080/index.html
 ```
-
+>### 🚀 **Demo:** [Click here to view](https://drive.google.com/file/d/1U5DX8IxGYzPvO1Nv_iy6Vd-Jw6BVYeB5/view?usp=sharing)
