@@ -31,13 +31,15 @@ A full-stack expense management web application built with **Java Spring Boot** 
 ## 📸 Screenshots
 
 ### Dashboard — Yearly View with Analytics & Charts
-![Dashboard](screenshots/SS2.png)
-
-### Expense Table — Monthly View
-![Expense Table](screenshots/SS1.png)
+![Dashboard](Screenshots/SS3.png)
 
 ### AI Insights — Spending Analysis
-![AI Insights](screenshots/SS3.png)
+![AI Insights](Screenshots/SS2.png)
+
+### Expense Table — Monthly View
+![Expense Table](Screenshots/SS1.png)
+
+
 
 
 ---
