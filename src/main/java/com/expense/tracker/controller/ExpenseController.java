@@ -49,4 +49,9 @@ public class ExpenseController {
     public String getInsights() {
         return service.getAiInsights();
     }
+    
+    @PutMapping("/expenses/{id}")
+    public Expense updateExpense(@PathVariable Long id, @RequestBody Expense updatedExpense) {
+        return service.updateExpense(id, updatedExpense);
+    }
 }

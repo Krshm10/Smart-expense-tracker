@@ -34,7 +34,8 @@
                 </div>
                 <input type="date" id="date" />
                 <input type="text" id="description" placeholder="Description" />
-                <button onclick="addExpense()">Add</button>
+                <button id="submit-btn" onclick="addExpense()">Add</button>
+                <button id="cancel-edit-btn" onclick="cancelEdit()" class="hidden">Cancel</button>
             </div>
         </div>
 
@@ -44,6 +45,7 @@
             <div class="toggle-row">
                 <button class="toggle-btn active" id="btn-monthly" onclick="switchView('monthly')">Monthly</button>
                 <button class="toggle-btn" id="btn-yearly" onclick="switchView('yearly')">Yearly</button>
+                
                 <select id="year-select" onchange="loadFiltered()">
                     <option value="2026">2026</option>
                     <option value="2025">2025</option>
@@ -112,6 +114,7 @@
         const BASE = 'http://localhost:8080/api';
         let pieChart = null, barChart = null;
         let currentView = 'monthly';
+        let editingId = null;
 
         const monthNames = ['', 'January', 'February', 'March', 'April', 'May', 'June',
             'July', 'August', 'September', 'October', 'November', 'December'];
@@ -237,16 +240,52 @@
 
             if (!amount || !date) { alert('Please enter amount and date'); return; }
 
-            await fetch(`${BASE}/expenses`, {
-                method: 'POST',
+            const url = editingId ? `${BASE}/expenses/${editingId}` : `${BASE}/expenses`;
+            const method = editingId ? 'PUT' : 'POST';
+
+            await fetch(url, {
+                method,
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ amount, category, date, description })
             });
 
+            resetForm();
+            loadFiltered();
+        }
+
+        function editExpense(id, expense) {
+            editingId = id;
+            document.getElementById('amount').value = expense.amount;
+            document.getElementById('date').value = expense.date;
+            document.getElementById('description').value = expense.description || '';
+
+            const categorySelect = document.getElementById('category');
+            const knownCategories = Array.from(categorySelect.options).map(o => o.value);
+            if (knownCategories.includes(expense.category)) {
+                categorySelect.value = expense.category;
+                document.getElementById('custom-category').classList.add('hidden');
+            } else {
+                categorySelect.value = 'Other (type below)';
+                document.getElementById('custom-category').value = expense.category;
+                document.getElementById('custom-category').classList.remove('hidden');
+            }
+
+            document.getElementById('submit-btn').textContent = 'Update';
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function cancelEdit() {
+            resetForm();
+        }
+
+        function resetForm() {
+            editingId = null;
             document.getElementById('amount').value = '';
             document.getElementById('description').value = '';
             document.getElementById('custom-category').value = '';
-            loadFiltered();
+            document.getElementById('submit-btn').textContent = 'Add';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
         }
 
         function getBadgeColor(category) {
@@ -282,7 +321,10 @@
           <td><span class="badge" style="${getBadgeColor(e.category)}">${e.category}</span></td>
           <td>${e.date}</td>
           <td>${e.description || '-'}</td>
-          <td><button class="del-btn" onclick="deleteExpense(${e.id})">Delete</button></td>
+          <td>
+            <button class="edit-btn" onclick='editExpense(${e.id}, ${JSON.stringify(e)})'>Edit</button>
+            <button class="del-btn" onclick="deleteExpense(${e.id})">Delete</button>
+          </td>
         </tr>`;
             });
 

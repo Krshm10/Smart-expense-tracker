@@ -27,6 +27,7 @@ public class ExpenseService {
     public void deleteExpense(Long id) {
         repo.deleteById(id);
     }
+    
 
     // Filter by month
     public List<Expense> getByMonth(int year, int month) {
@@ -120,5 +121,17 @@ public class ExpenseService {
         if (all.isEmpty())
             return "Add some expenses first!";
         return aiInsightService.getInsights(all);
+    }
+    
+    public Expense updateExpense(Long id, Expense updatedExpense) {
+        Expense existing = repo.findById(id)
+                .orElseThrow(() -> new RuntimeException("Expense not found with id: " + id));
+
+        existing.setAmount(updatedExpense.getAmount());
+        existing.setCategory(updatedExpense.getCategory());
+        existing.setDate(updatedExpense.getDate());
+        existing.setDescription(updatedExpense.getDescription());
+
+        return repo.save(existing);
     }
 }
