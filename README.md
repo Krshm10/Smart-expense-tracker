@@ -4,7 +4,7 @@ A full-stack expense management web application built with **Java Spring Boot** 
 
 ---
 
-## 🚀 Live Features
+## 🚀 Features
 
 - **Add & manage expenses** with flexible categories (preset + custom)
 - **Monthly / Yearly toggle** — filter expenses by month or full year
@@ -31,13 +31,15 @@ A full-stack expense management web application built with **Java Spring Boot** 
 ## 📸 Screenshots
 
 ### Dashboard — Yearly View with Analytics & Charts
-![Dashboard](screenshots/SS2.png)
-
-### Expense Table — Monthly View
-![Expense Table](screenshots/SS1.png)
+![Dashboard](Screenshots/SS3.png)
 
 ### AI Insights — Spending Analysis
-![AI Insights](screenshots/SS3.png)
+![AI Insights](Screenshots/SS2.png)
+
+### Expense Table — Monthly View
+![Expense Table](Screenshots/SS1.png)
+
+
 
 
 ---
@@ -89,4 +91,4 @@ spring.web.resources.static-locations=classpath:/static/
 ```
 http://localhost:8080/index.html
 ```
-
+>### 🚀 **Demo:** [Click here to view](https://drive.google.com/file/d/1U5DX8IxGYzPvO1Nv_iy6Vd-Jw6BVYeB5/view?usp=sharing)
